@@ -30,7 +30,7 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Install Expo and EAS CLI
+      - name: Install EAS CLI
         run: npm install -g eas-cli
 
       - name: Verify Expo Login
@@ -38,7 +38,14 @@ jobs:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: eas whoami
 
+      - name: Initialize EAS Project
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          eas init --account neura-tech-ais-team --non-interactive
+
       - name: Build APK
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas build --platform android --profile preview --non-interactive
+        run: |
+          eas build --platform android --profile preview --non-interactive

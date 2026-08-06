@@ -57,8 +57,11 @@ jobs:
             EOF
           fi
 
-      - name: Build APK
-        env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: |
-          eas build --platform android --profile preview --non-interactive
+            - name: Build APK
+              env:
+                EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+              run: |
+                npx eas-cli build \
+                  --platform android \
+                  --profile preview \
+                  --non-interactive

@@ -21,27 +21,30 @@ jobs:
           node-version: 20
           cache: npm
 
-      - name: Install Dependencies
-        run: npm ci || npm install
-
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: "17"
+
+      - name: Install Dependencies
+        run: |
+          npm ci || npm install
 
       - name: Install Expo & EAS CLI
-        run: npm install -g expo-cli eas-cli
+        run: |
+          npm install -g expo-cli eas-cli
 
-      - name: Login to Expo
+      - name: Verify Expo Login
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas whoami
+        run: |
+          eas whoami
 
-      - name: Configure EAS
+      - name: Create eas.json
         run: |
           if [ ! -f eas.json ]; then
-            cat > eas.json <<EOF
+            cat > eas.json << 'EOF'
             {
               "build": {
                 "preview": {
@@ -57,4 +60,5 @@ jobs:
       - name: Build APK
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas build --platform android --profile preview --non-interactive
+        run: |
+          eas build --platform android --profile preview --non-interactive
